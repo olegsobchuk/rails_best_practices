@@ -40,3 +40,17 @@ end
 ## SERVICES
 
 ## TESTS
+
+don't use instance variables, instead use `let`
+
+```
+# bad
+before do
+  @user = User.create(first_name: 'John', age: 30)
+end
+```
+
+```
+#good
+let(:user) { FactoryGirl.create(:user) }
+```
