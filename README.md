@@ -37,6 +37,26 @@ class User < SuperClass
 end
 ```
 
+***
+
+use `scope`s only for getting ` ActiveRecord::Relation`, not for single record
+
+```
+# bad
+
+scope :last_active_user, -> { where(active: true).last }
+```
+
+```
+# good
+
+scope :active, -> { where(active: true) }
+
+def self.last_active_user
+  active.last
+end
+```
+
 ## SERVICES
 
 ## TESTS
