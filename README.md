@@ -39,6 +39,60 @@ end
 
 ***
 
+##### STI
+
+use STI models only if inherited objects use same fields
+
+if one uses more then one particular column in DB DON'T use STI
+
+it's very usefull at very start, but when application increasing it can make many problems
+
+***
+
+##### Validation
+
+if several attributes have exactly same validation requirements write them in single string
+
+    validates :first_name, :last_name, presence: true
+
+if attributes have different requirements create them different descriptions
+
+    validates :first_name, presence: true, length: { minimum: 6 }
+    validates :first_name, presence: true
+
+if you need custom validation and this validation will be used only for one model write it
+in private method
+
+    validate :work_place
+
+    ......
+
+    private
+
+    def work_place
+      ...
+      errors.add(:field_name, 'Custom error message')
+      ...
+    end
+
+if your custom validator will be used for fiels in more then one model create [Custom Validators](http://guides.rubyonrails.org/active_record_validations.html#custom-validators)
+
+    path: 'app/validators/'
+
+    class EmailValidator < ActiveModel::EachValidator
+      def validate_each(record, attribute, value)
+        unless value =~ /\A.+@.+\..+\z/i
+          record.errors[attribute] << (options[:message] || "is not an email")
+        end
+      end
+    end
+
+    class Person < ApplicationRecord
+      validates :email, presence: true, email: true
+    end
+
+***
+
 use `scope`s only for getting ` ActiveRecord::Relation`, not for single record
 
 ```
