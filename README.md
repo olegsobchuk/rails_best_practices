@@ -1,7 +1,8 @@
 # Rails Best Practices
 
 * [Models](#models)
-* Controllers
+* [Controllers](#controllers)
+* [Services](#services)
 * Decorators
 * [Services](#services)
 * [Tests](#tests)
@@ -57,7 +58,49 @@ def self.last_active_user
 end
 ```
 
+## CONTROLLERS
+
+some browsers have issue with caching pages, so you can face to next issue:
+
+1. you use AJAX request for rendering page
+2. go to another internet resource (for example from your site you go to `http://google.com/`)
+3. click `back` button
+4. instead expected your page, browser can render raw JavaScript
+
+to avoid this situation in `ApplicationController.rb` add:
+
+```
+  before_action :headers_settings
+
+  private
+
+  def headers_settings
+    if request.xhr?
+      response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
+      response.headers['Pragma'] = 'no-cache'
+      response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+    end
+  end
+
+```
+
+
+
 ## SERVICES
+
+Use comments before method definition. Comment can be consists of description and usage example.
+
+Attributes should be wrap in asterisks `*tax*`
+
+```
+#
+# make payment
+# *tax* should be in cents ($1 is tax = 100)
+# My::PaymentService.new(user).pay_tax(1_500)
+def pay_tax(tax)
+  .....
+end
+```
 
 ## TESTS
 
