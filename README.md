@@ -7,19 +7,57 @@
 * [Services](#services)
 * [Tests](#tests)
 
+## SYNTAX
+
+- string size should be:
+
+**100 or less** characters - **GOOD**
+
+**100 - 120** characters - **NOT BAD**
+
+**120** characters - **bad**
+
+- if you need divide code to several string
+leave dot or comma at the end of the string
+
+BAD
+```
+User.select(:first_name, :last_name)
+  .where(active: false)
+
+User.notify!(from: 'admin@em.ail'
+  , message: 'DO IT!')
+```
+
+GOOD
+
+```
+User.select(:first_name, :last_name).
+  where(active: false)
+
+User.notify!(from: 'admin@em.ail',
+  message: 'DO IT!')
+```
+
 ## MODELS
 
 define single model's structure for whole team and add it when you create new model. Each member of team have to wright code according to this structure, for example
 
 ```
 class User < SuperClass
+  # includes of foreign packages and modules
+
+  # default_scope - BUT I don't think it is good idea to use it
+
+  # attr_accessor, attr_reader
+
+  # CALLBACKS
+
   # CONSTANTS
 
   # ENUMs
 
-  # CALLBACKS
-
-  # foreign includes, like has_secure_password, uploaders etc
+  # includes methods, like has_secure_password, uploaders etc
 
   # VALIDATORS
 
@@ -36,6 +74,19 @@ class User < SuperClass
 
   # INSTANCE METHODS
 end
+```
+
+***
+`enum` - should be used in key-value format, not only as keys (like array)
+
+BAD
+```
+enum status: [:active, :inactive, :draft]
+```
+
+GOOD
+```
+enum status: { active:  0, inactive: 1, draft: 2 }
 ```
 
 ***
